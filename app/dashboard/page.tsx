@@ -9,11 +9,29 @@ import { useRouter } from 'next/navigation'
 export default function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [userAcessos, setUserAcessos] = useState<string[]>([])
   const router = useRouter()
 
   const projects = projectsData.projects as Project[]
   const stats = projectsData.stats
   const links = projectsData.links
+
+  useEffect(() => {
+    // Buscar dados do usuário autenticado
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('/api/auth/me')
+        if (response.ok) {
+          const data = await response.json()
+          setUserAcessos(data.user.acessos || [])
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error)
+      }
+    }
+    
+    fetchUserData()
+  }, [])
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
@@ -76,7 +94,10 @@ export default function DashboardPage() {
 
     const matchesCategory = !selectedCategory || project.category === selectedCategory
 
-    return matchesSearch && matchesCategory
+    // Filtrar por acessos do usuário
+    const hasAccess = userAcessos.length === 0 || userAcessos.includes(project.name)
+
+    return matchesSearch && matchesCategory && hasAccess
   })
 
   const categories = Array.from(new Set(projects.map(p => p.category)))

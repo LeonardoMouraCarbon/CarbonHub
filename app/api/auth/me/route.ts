@@ -18,7 +18,8 @@ export async function GET() {
       user: {
         userId: decoded.userId,
         email: decoded.email,
-        name: decoded.name
+        name: decoded.name,
+        acessos: decoded.acessos || []
       }
     })
 

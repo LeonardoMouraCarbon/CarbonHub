@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     
     // Buscar usuário na tabela users
     const users = await sql`
-      SELECT id, email, password_hash, nome 
+      SELECT id, email, password_hash, nome, acessos 
       FROM users 
       WHERE email = ${email}
       LIMIT 1
@@ -47,7 +47,8 @@ export async function POST(request: Request) {
       { 
         userId: user.id, 
         email: user.email,
-        name: user.nome 
+        name: user.nome,
+        acessos: user.acessos || []
       },
       process.env.JWT_SECRET!,
       { expiresIn: '7d' }
@@ -59,7 +60,8 @@ export async function POST(request: Request) {
       user: {
         id: user.id,
         email: user.email,
-        name: user.nome
+        name: user.nome,
+        acessos: user.acessos || []
       }
     })
 
