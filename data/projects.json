@@ -1,0 +1,100 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "name": "SISCON",
+      "description": "Gestão de dados e analítico de volumetria e performance do consignado privado",
+      "url": "https://siscon-phi.vercel.app",
+      "status": "online",
+      "category": "BI & Analytics",
+      "tags": ["analytics", "consignado", "dashboard"]
+    },
+    {
+      "id": "2",
+      "name": "Consig Carbon",
+      "description": "Automação de campanhas via SMS e acompanhamento de conversão de leads.",
+      "url": "https://consig-track.vercel.app",
+      "status": "online",
+      "category": "Gestão & CRM",
+      "tags": ["sms", "campanhas", "leads"]
+    },
+    {
+      "id": "3",
+      "name": "CSV Converter Pro",
+      "description": "Utilitário para formatação de arquivos bancários e estruturação de dados de conciliação.",
+      "url": "https://csv-converter-pro.vercel.app",
+      "status": "online",
+      "category": "Data & Infrastructure",
+      "tags": ["csv", "bancário", "conciliação"]
+    },
+    {
+      "id": "4",
+      "name": "Carbon ID",
+      "description": "Controle centralizado de acessos, autenticação e permissões corporativas.",
+      "url": "https://carbon-id.vercel.app",
+      "status": "online",
+      "category": "Data & Infrastructure",
+      "tags": ["auth", "identity", "permissões"]
+    },
+    {
+      "id": "5",
+      "name": "Posição Frigomarca",
+      "description": "Visão estratégica e monitoramento diário da operação Frigomarca.",
+      "url": "https://posic-frigo.vercel.app",
+      "status": "online",
+      "category": "BI & Analytics",
+      "tags": ["dashboard", "monitoramento", "operação"]
+    },
+    {
+      "id": "6",
+      "name": "CRM Precatórios",
+      "description": "Gestão do funil de relacionamento e esteira de negociação de precatórios.",
+      "url": "https://crm-precatorios.vercel.app",
+      "status": "online",
+      "category": "Gestão & CRM",
+      "tags": ["crm", "funil", "negociação"]
+    },
+    {
+      "id": "7",
+      "name": "Gestão de Convênios Privados",
+      "description": "Parametrização e manutenção da base estruturada de convênios.",
+      "url": "https://neon-data-hub.vercel.app",
+      "status": "online",
+      "category": "Data & Infrastructure",
+      "tags": ["convênios", "parametrização", "database"]
+    },
+    {
+      "id": "8",
+      "name": "CRM Desligados",
+      "description": "Estratégias de reengajamento e gestão ativa de clientes inativos.",
+      "url": "https://seguro-connect.vercel.app",
+      "status": "online",
+      "category": "Gestão & CRM",
+      "tags": ["crm", "reengajamento", "clientes"]
+    },
+    {
+      "id": "9",
+      "name": "Gestão de CPFs Enriquecidos",
+      "description": "Repositório de dados tratados e enriquecidos para operações comerciais.",
+      "url": "https://base-higienizada.vercel.app",
+      "status": "online",
+      "category": "Data & Infrastructure",
+      "tags": ["data-enrichment", "cpf", "repositório"]
+    }
+  ],
+  "stats": {
+    "totalProjects": 9,
+    "activeProjects": 9,
+    "categories": ["BI & Analytics", "Gestão & CRM", "Data & Infrastructure"]
+  },
+  "links": {
+    "github": "https://github.com/leonardomoura",
+    "documentation": "https://leonardomoura.dev",
+    "linkedin": "https://linkedin.com/in/leonardomoura"
+  },
+  "brandVideo": {
+    "url": "",
+    "title": "",
+    "description": ""
+  }
+}
