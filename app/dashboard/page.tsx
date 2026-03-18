@@ -22,7 +22,7 @@ export default function DashboardPage() {
     'Convênios Consig Priv':   'Gestão de Convênios Privados',
     'PosiFrig':                'Posição Frigomarca',
     'CRM Desligados':          'CRM Desligados',
-    'CRM Precatórios':         'CRM Precatórios',
+    'CRM Precatorios':         'CRM Precatórios',
     'Carbon ID':               'Carbon ID',
   }
 
