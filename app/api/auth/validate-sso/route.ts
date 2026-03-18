@@ -18,7 +18,7 @@ export async function OPTIONS() {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { token } = body
+    const { token, projectKey } = body
 
     if (!token) {
       return NextResponse.json(
@@ -32,6 +32,8 @@ export async function POST(request: Request) {
       userId: string
       email: string
       name: string
+      acessos: string[]
+      role: string
       type: string
       timestamp: number
     }
@@ -44,13 +46,31 @@ export async function POST(request: Request) {
       )
     }
 
+    // Verificar acesso ao projeto, se projectKey foi informado
+    if (projectKey) {
+      const acessos = decoded.acessos || []
+      const role = decoded.role || 'user'
+      const isAdmin = role === 'admin'
+      const isAdminProject = projectKey === 'Carbon ID'
+      const hasAccess = acessos.includes(projectKey) || (isAdmin && isAdminProject)
+
+      if (!hasAccess) {
+        return NextResponse.json(
+          { valid: false, error: 'Acesso negado a este sistema' },
+          { status: 403, headers: corsHeaders }
+        )
+      }
+    }
+
     // Token is valid
     return NextResponse.json({
       valid: true,
       user: {
         id: decoded.userId,
         email: decoded.email,
-        name: decoded.name
+        name: decoded.name,
+        acessos: decoded.acessos || [],
+        role: decoded.role || 'user'
       }
     }, { headers: corsHeaders })
   } catch (error) {
@@ -95,6 +115,8 @@ export async function GET(request: Request) {
       userId: string
       email: string
       name: string
+      acessos: string[]
+      role: string
       type: string
       timestamp: number
     }
@@ -113,7 +135,9 @@ export async function GET(request: Request) {
       user: {
         id: decoded.userId,
         email: decoded.email,
-        name: decoded.name
+        name: decoded.name,
+        acessos: decoded.acessos || [],
+        role: decoded.role || 'user'
       }
     }, { headers: corsHeaders })
   } catch (error) {

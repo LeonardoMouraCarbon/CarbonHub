@@ -21,6 +21,8 @@ export async function GET() {
       userId: string
       email: string
       name: string
+      acessos: string[]
+      role: string
     }
 
     // Generate SSO token with shorter expiration (30 minutes)
@@ -29,6 +31,8 @@ export async function GET() {
         userId: decoded.userId,
         email: decoded.email,
         name: decoded.name,
+        acessos: decoded.acessos || [],
+        role: decoded.role || 'user',
         type: 'sso',
         timestamp: Date.now()
       },
