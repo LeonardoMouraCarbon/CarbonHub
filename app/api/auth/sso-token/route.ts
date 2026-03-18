@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
+import { neon } from '@neondatabase/serverless'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'carbon-hub-secret-key-2026-secure'
 
@@ -21,9 +22,16 @@ export async function GET() {
       userId: string
       email: string
       name: string
-      acessos: string[]
-      role: string
     }
+
+    // Buscar acessos e role frescos do banco
+    const sql = neon(process.env.DATABASE_URL!)
+    const users = await sql`
+      SELECT acessos, role FROM users WHERE email = ${decoded.email} LIMIT 1
+    `
+    const dbUser = users[0] ?? {}
+    const acessos: string[] = dbUser.acessos || []
+    const role: string = dbUser.role || 'user'
 
     // Generate SSO token with shorter expiration (30 minutes)
     const ssoToken = jwt.sign(
@@ -31,8 +39,8 @@ export async function GET() {
         userId: decoded.userId,
         email: decoded.email,
         name: decoded.name,
-        acessos: decoded.acessos || [],
-        role: decoded.role || 'user',
+        acessos,
+        role,
         type: 'sso',
         timestamp: Date.now()
       },
