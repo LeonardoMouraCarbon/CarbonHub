@@ -19,7 +19,8 @@ export async function GET() {
         userId: decoded.userId,
         email: decoded.email,
         name: decoded.name,
-        acessos: decoded.acessos || []
+        acessos: decoded.acessos || [],
+        role: decoded.role || 'user'
       }
     })
 

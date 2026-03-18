@@ -10,7 +10,20 @@ export default function DashboardPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [userAcessos, setUserAcessos] = useState<string[]>([])
+  const [userRole, setUserRole] = useState<string>('')
   const router = useRouter()
+
+  // Mapeamento: chaves no banco → nomes exatos dos projetos no sistema
+  const ACESSOS_MAP: Record<string, string> = {
+    'SISCON':                  'SISCON',
+    'ConsigTrack':             'Consig Carbon',
+    'CSVConverter':            'CSV Converter Pro',
+    'Bases Higienizadas':      'Gestão de CPFs Enriquecidos',
+    'Convênios Consig Priv':   'Gestão de Convênios Privados',
+    'PosiFrig':                'Posição Frigomarca',
+    'CRM Desligados':          'CRM Desligados',
+    'Carbon ID':               'Carbon ID',
+  }
 
   const projects = projectsData.projects as Project[]
   const stats = projectsData.stats
@@ -24,6 +37,7 @@ export default function DashboardPage() {
         if (response.ok) {
           const data = await response.json()
           setUserAcessos(data.user.acessos || [])
+          setUserRole(data.user.role || 'user')
         }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error)
@@ -94,8 +108,13 @@ export default function DashboardPage() {
 
     const matchesCategory = !selectedCategory || project.category === selectedCategory
 
-    // Filtrar por acessos do usuário (sem acessos = nenhum projeto)
-    const hasAccess = userAcessos.length > 0 && userAcessos.includes(project.name)
+    // Traduzir acessos do banco para nomes dos projetos + Carbon ID para admins
+    const projetosPermitidos = [
+      ...userAcessos.map(a => ACESSOS_MAP[a] ?? a),
+      ...(userRole === 'admin' ? ['Carbon ID'] : [])
+    ]
+
+    const hasAccess = projetosPermitidos.length > 0 && projetosPermitidos.includes(project.name)
 
     return matchesSearch && matchesCategory && hasAccess
   })
@@ -332,7 +351,7 @@ export default function DashboardPage() {
         {/* Empty state */}
         {filteredProjects.length === 0 && (
           <div className="text-center py-20">
-            {userAcessos.length === 0 ? (
+            {userAcessos.length === 0 && userRole !== 'admin' ? (
               <>
                 <div className="w-16 h-16 bg-black/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <svg className="w-8 h-8 text-[#999999]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
