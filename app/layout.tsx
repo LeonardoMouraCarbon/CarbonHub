@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Developer Hub | Unified Access to Your Projects',
-  description: 'Centralize o acesso aos seus projetos Full Stack hospedados na Vercel',
+  title: 'Carbon Hub & DEVELOPER',
+  description: 'Console centralizado de inteligência de dados e operações da Carbon Capital SA',
   icons: {
     icon: '/favicon.png',
   },
