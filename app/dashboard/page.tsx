@@ -101,6 +101,15 @@ export default function DashboardPage() {
     }
   }
 
+  const projetosPermitidos = [
+    ...userAcessos.map(a => ACESSOS_MAP[a] ?? a),
+    ...(userRole === 'admin' ? ['Carbon ID'] : [])
+  ]
+
+  const userProjects = projects.filter(p =>
+    projetosPermitidos.length > 0 && projetosPermitidos.includes(p.name)
+  )
+
   const filteredProjects = projects.filter((project) => {
     const matchesSearch = 
       project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -110,11 +119,6 @@ export default function DashboardPage() {
     const matchesCategory = !selectedCategory || project.category === selectedCategory
 
     // Traduzir acessos do banco para nomes dos projetos + Carbon ID para admins
-    const projetosPermitidos = [
-      ...userAcessos.map(a => ACESSOS_MAP[a] ?? a),
-      ...(userRole === 'admin' ? ['Carbon ID'] : [])
-    ]
-
     const hasAccess = projetosPermitidos.length > 0 && projetosPermitidos.includes(project.name)
 
     return matchesSearch && matchesCategory && hasAccess
@@ -248,7 +252,7 @@ export default function DashboardPage() {
               <Code2 className="w-10 h-10 text-[#00d2c7]" />
               <div className="w-3 h-3 bg-[#00d2c7] rounded-full animate-pulse"></div>
             </div>
-            <div className="text-5xl font-bold text-black mb-3">{stats.totalProjects}</div>
+            <div className="text-5xl font-bold text-black mb-3">{userProjects.length}</div>
             <div className="text-sm tracking-[0.2em] uppercase text-[#999999]">TOTAL DE PROJETOS</div>
           </div>
 
@@ -257,7 +261,7 @@ export default function DashboardPage() {
               <Activity className="w-10 h-10 text-[#00d2c7]" />
               <div className="w-3 h-3 bg-[#00d2c7] rounded-full animate-pulse"></div>
             </div>
-            <div className="text-5xl font-bold text-black mb-3">{stats.activeProjects}</div>
+            <div className="text-5xl font-bold text-black mb-3">{userProjects.length}</div>
             <div className="text-sm tracking-[0.2em] uppercase text-[#999999]">PRODUÇÃO</div>
           </div>
 
