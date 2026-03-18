@@ -24,6 +24,7 @@ export default function DashboardPage() {
     'CRM Desligados':          'CRM Desligados',
     'CRM Precatorios':         'CRM Precatórios',
     'Carbon ID':               'Carbon ID',
+    'CARBON ID':               'Carbon ID',
   }
 
   const projects = projectsData.projects as Project[]
