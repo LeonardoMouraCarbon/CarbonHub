@@ -94,8 +94,8 @@ export default function DashboardPage() {
 
     const matchesCategory = !selectedCategory || project.category === selectedCategory
 
-    // Filtrar por acessos do usuário
-    const hasAccess = userAcessos.length === 0 || userAcessos.includes(project.name)
+    // Filtrar por acessos do usuário (sem acessos = nenhum projeto)
+    const hasAccess = userAcessos.length > 0 && userAcessos.includes(project.name)
 
     return matchesSearch && matchesCategory && hasAccess
   })
@@ -332,16 +332,41 @@ export default function DashboardPage() {
         {/* Empty state */}
         {filteredProjects.length === 0 && (
           <div className="text-center py-20">
-            <div className="text-[#666666] text-lg mb-4 tracking-wide">NENHUM PROJETO ENCONTRADO</div>
-            <button
-              onClick={() => {
-                setSearchTerm('')
-                setSelectedCategory(null)
-              }}
-              className="text-[#00d2c7] hover:text-[#161616] transition-colors tracking-wider text-sm uppercase"
-            >
-              Limpar Filtros
-            </button>
+            {userAcessos.length === 0 ? (
+              <>
+                <div className="w-16 h-16 bg-black/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <svg className="w-8 h-8 text-[#999999]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <div className="text-black text-xl font-bold tracking-wide mb-3">ACESSO NÃO CONFIGURADO</div>
+                <p className="text-[#666666] text-sm leading-relaxed max-w-sm mx-auto mb-6">
+                  Você não possui acesso a nenhum projeto no momento. Entre em contato com o administrador do sistema para solicitar a liberação dos acessos.
+                </p>
+                <a
+                  href="mailto:admin@carboncapital.com.br"
+                  className="inline-flex items-center gap-2 bg-[#00d2c7] text-white px-8 py-3 text-[11px] font-semibold tracking-[0.2em] uppercase hover:bg-[#161616] transition-colors duration-300"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  CONTATAR ADMINISTRADOR
+                </a>
+              </>
+            ) : (
+              <>
+                <div className="text-[#666666] text-lg mb-4 tracking-wide">NENHUM PROJETO ENCONTRADO</div>
+                <button
+                  onClick={() => {
+                    setSearchTerm('')
+                    setSelectedCategory(null)
+                  }}
+                  className="text-[#00d2c7] hover:text-[#161616] transition-colors tracking-wider text-sm uppercase"
+                >
+                  Limpar Filtros
+                </button>
+              </>
+            )}
           </div>
         )}
       </section>
