@@ -217,9 +217,9 @@ export default function DashboardPage() {
         <div className="flex animate-[marqueeScroll_30s_linear_infinite] w-max">
           {[...Array(4)].map((_, i) => (
             <div key={i} className="flex items-center gap-10 px-10 whitespace-nowrap">
-              <span className="text-xl tracking-[0.2em] text-[#6B6B6B] uppercase font-bold">{stats.totalProjects} PROJETOS</span>
+              <span className="text-xl tracking-[0.2em] text-[#6B6B6B] uppercase font-bold">{userProjects.length} PROJETOS</span>
               <div className="w-1 h-1 bg-[#00d2c7] rounded-full"></div>
-              <span className="text-xl tracking-[0.2em] text-[#6B6B6B] uppercase font-bold">{stats.activeProjects} ATIVOS</span>
+              <span className="text-xl tracking-[0.2em] text-[#6B6B6B] uppercase font-bold">{userProjects.length} ATIVOS</span>
               <div className="w-1 h-1 bg-[#00d2c7] rounded-full"></div>
               <span className="text-xl tracking-[0.2em] text-[#6B6B6B] uppercase font-bold">100% UPTIME</span>
               <div className="w-1 h-1 bg-[#00d2c7] rounded-full"></div>
