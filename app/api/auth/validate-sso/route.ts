@@ -49,10 +49,7 @@ export async function POST(request: Request) {
     // Verificar acesso ao projeto, se projectKey foi informado
     if (projectKey) {
       const acessos = decoded.acessos || []
-      const role = decoded.role || 'user'
-      const isAdmin = role === 'admin'
-      const isAdminProject = projectKey === 'Carbon ID'
-      const hasAccess = acessos.includes(projectKey) || (isAdmin && isAdminProject)
+      const hasAccess = acessos.includes(projectKey)
 
       if (!hasAccess) {
         return NextResponse.json(

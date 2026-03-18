@@ -101,10 +101,7 @@ export default function DashboardPage() {
     }
   }
 
-  const projetosPermitidos = [
-    ...userAcessos.map(a => ACESSOS_MAP[a] ?? a),
-    ...(userRole === 'admin' ? ['Carbon ID'] : [])
-  ]
+  const projetosPermitidos = userAcessos.map(a => ACESSOS_MAP[a] ?? a)
 
   const userProjects = projects.filter(p =>
     projetosPermitidos.length > 0 && projetosPermitidos.includes(p.name)
