@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Developer Hub | Unified Access to Your Projects',
   description: 'Centralize o acesso aos seus projetos Full Stack hospedados na Vercel',
+  icons: {
+    icon: '/favicon.png',
+  },
 }
 
 export default function RootLayout({
