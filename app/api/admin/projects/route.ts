@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'carbonhub-secret-key'
 async function verifyAdmin(request: NextRequest) {
   try {
     const cookieStore = await cookies()
-    const token = cookieStore.get('auth_token')?.value
+    const token = cookieStore.get('token')?.value
     if (!token) return null
 
     const decoded = verify(token, JWT_SECRET) as any

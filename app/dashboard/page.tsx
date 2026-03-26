@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ExternalLink, Code2, Activity, Zap, Search, ArrowUpRight, LogOut } from 'lucide-react'
+import { ExternalLink, Code2, Activity, Zap, Search, ArrowUpRight, LogOut, Settings } from 'lucide-react'
 import type { Project } from '@/components/ProjectCard'
-import projectsData from '@/data/projects.json'
 import { useRouter } from 'next/navigation'
 
 export default function DashboardPage() {
@@ -11,42 +10,42 @@ export default function DashboardPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [userAcessos, setUserAcessos] = useState<string[]>([])
   const [userRole, setUserRole] = useState<string>('')
+  const [userEmail, setUserEmail] = useState<string>('')
+  const [projects, setProjects] = useState<Project[]>([])
   const router = useRouter()
 
-  // Mapeamento: chaves no banco → nomes exatos dos projetos no sistema
-  const ACESSOS_MAP: Record<string, string> = {
-    'SISCON':                  'SISCON',
-    'ConsigTrack':             'Consig Carbon',
-    'CSVConverter':            'CSV Converter Pro',
-    'Bases Higienizadas':      'Gestão de CPFs Enriquecidos',
-    'Convênios Consig Priv':   'Gestão de Convênios Privados',
-    'PosiFrig':                'Posição Frigomarca',
-    'CRM Desligados':          'CRM Desligados',
-    'CRM Precatorios':         'CRM Precatórios',
-    'Carbon ID':               'Carbon ID',
-    'CARBON ID':               'Carbon ID',
-  }
+  // ACESSOS_MAP construído dinamicamente a partir dos projetos do banco
+  const ACESSOS_MAP: Record<string, string> = Object.fromEntries(
+    projects.flatMap((p: any) => [
+      [p.accessKey, p.name],
+      ...(p.accessKey !== p.name ? [[p.name, p.name]] : []),
+    ])
+  )
 
-  const projects = projectsData.projects as Project[]
-  const stats = projectsData.stats
-  const links = projectsData.links
+  const links = { github: '', documentation: '', linkedin: '' }
 
   useEffect(() => {
-    // Buscar dados do usuário autenticado
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/auth/me')
-        if (response.ok) {
-          const data = await response.json()
+        const [userRes, projectsRes] = await Promise.all([
+          fetch('/api/auth/me'),
+          fetch('/api/projects'),
+        ])
+        if (userRes.ok) {
+          const data = await userRes.json()
           setUserAcessos(data.user.acessos || [])
           setUserRole(data.user.role || 'user')
+          setUserEmail(data.user.email || '')
+        }
+        if (projectsRes.ok) {
+          const data = await projectsRes.json()
+          setProjects(data.projects || [])
         }
       } catch (error) {
-        console.error('Erro ao buscar dados do usuário:', error)
+        console.error('Erro ao buscar dados:', error)
       }
     }
-    
-    fetchUserData()
+    fetchData()
   }, [])
 
   const handleLogout = async () => {
@@ -149,6 +148,16 @@ export default function DashboardPage() {
               <span className="absolute bottom-[-4px] left-0 w-0 h-[1px] bg-[#00d2c7] transition-all duration-300 group-hover:w-full"></span>
             </button>
           </div>
+
+          {userEmail === 'leonardo.moura@carboncapital.com.br' && (
+            <button
+              onClick={() => router.push('/admin/projetos')}
+              className="text-[10px] tracking-[0.2em] uppercase px-4 py-2 border border-white/20 text-white/60 hover:text-white hover:border-white/50 transition-all duration-300 flex items-center gap-2"
+            >
+              <Settings className="w-3 h-3" />
+              ADMIN
+            </button>
+          )}
 
           <button 
             onClick={handleLogout}
@@ -493,8 +502,8 @@ export default function DashboardPage() {
             <div>
               <div className="text-[11px] font-bold tracking-[0.2em] uppercase mb-5 text-black">ESTATÍSTICAS</div>
               <div className="space-y-3 text-sm text-[#666666]">
-                <div>{stats.totalProjects} Projetos Totais</div>
-                <div>{stats.activeProjects} Online</div>
+                <div>{projects.length} Projetos Totais</div>
+                <div>{projects.filter((p: any) => p.status === 'online').length} Online</div>
                 <div>100% Disponibilidade</div>
               </div>
             </div>
