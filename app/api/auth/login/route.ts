@@ -68,9 +68,13 @@ export async function POST(request: Request) {
     })
 
     // Definir cookie com token
+    const isProduction = process.env.NODE_ENV === 'production'
+    const cookieFlags = isProduction
+      ? `HttpOnly; Secure; SameSite=Strict`
+      : `HttpOnly; SameSite=Lax`
     response.headers.set(
       'Set-Cookie',
-      `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}; Path=/`
+      `token=${token}; ${cookieFlags}; Max-Age=${7 * 24 * 60 * 60}; Path=/`
     )
 
     return response

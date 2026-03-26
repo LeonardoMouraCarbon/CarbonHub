@@ -33,9 +33,11 @@ export default function DashboardPage() {
         ])
         if (userRes.ok) {
           const data = await userRes.json()
-          setUserAcessos(data.user.acessos || [])
-          setUserRole(data.user.role || 'user')
-          setUserEmail(data.user.email || '')
+          if (data.authenticated && data.user) {
+            setUserAcessos(data.user.acessos || [])
+            setUserRole(data.user.role || 'user')
+            setUserEmail(data.user.email || '')
+          }
         }
         if (projectsRes.ok) {
           const data = await projectsRes.json()
@@ -149,23 +151,25 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          {userEmail === 'leonardo.moura@carboncapital.com.br' && (
-            <button
-              onClick={() => router.push('/admin/projetos')}
-              className="text-[10px] tracking-[0.2em] uppercase px-4 py-2 border border-white/20 text-white/60 hover:text-white hover:border-white/50 transition-all duration-300 flex items-center gap-2"
-            >
-              <Settings className="w-3 h-3" />
-              ADMIN
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            {userEmail === 'leonardo.moura@carboncapital.com.br' && (
+              <button
+                onClick={() => router.push('/admin/projetos')}
+                className="text-[10px] tracking-[0.2em] uppercase px-4 py-2 border border-[#00d2c7] text-[#00d2c7] hover:bg-[#00d2c7] hover:text-white transition-all duration-300 flex items-center gap-2"
+              >
+                <Settings className="w-3 h-3" />
+                ADMIN
+              </button>
+            )}
 
-          <button 
-            onClick={handleLogout}
-            className="text-[10px] tracking-[0.2em] uppercase px-6 py-2 border border-[#00d2c7] text-[#00d2c7] hover:bg-[#00d2c7] hover:text-white transition-all duration-300 flex items-center gap-2"
-          >
-            <LogOut className="w-3 h-3" />
-            SAIR
-          </button>
+            <button 
+              onClick={handleLogout}
+              className="text-[10px] tracking-[0.2em] uppercase px-6 py-2 border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center gap-2"
+            >
+              <LogOut className="w-3 h-3" />
+              SAIR
+            </button>
+          </div>
         </div>
       </nav>
 
