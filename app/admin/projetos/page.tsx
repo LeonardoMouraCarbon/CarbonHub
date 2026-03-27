@@ -245,7 +245,7 @@ export default function AdminProjectsPage() {
               <Settings className="w-8 h-8 text-[#999999]" />
             </div>
             <div className="text-black text-xl font-bold tracking-wide mb-3">NENHUM SISTEMA CADASTRADO</div>
-            <p className="text-[#666666] text-sm mb-8">Clique em "NOVO SISTEMA" para começar.</p>
+            <p className="text-[#666666] text-sm mb-8">Clique em &quot;NOVO SISTEMA&quot; para começar.</p>
             <button
               onClick={openCreate}
               className="inline-flex items-center gap-4 bg-[#00d2c7] text-white px-10 py-4 text-[11px] font-semibold tracking-[0.25em] uppercase hover:bg-[#161616] transition-all duration-400"
