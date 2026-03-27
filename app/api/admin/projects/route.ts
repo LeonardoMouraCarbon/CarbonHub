@@ -4,7 +4,7 @@ import { verify } from 'jsonwebtoken'
 import { sql } from '@/lib/db'
 
 const ADMIN_EMAIL = 'leonardo.moura@carboncapital.com.br'
-const JWT_SECRET = process.env.JWT_SECRET || 'carbonhub-secret-key'
+const JWT_SECRET = process.env.JWT_SECRET || 'carbon-hub-secret-key-2026-secure'
 
 async function verifyAdmin(request: NextRequest) {
   try {
@@ -75,12 +75,17 @@ export async function POST(request: NextRequest) {
   `
 
   // Inserir em programas (accessKey é o nome do programa usado em users.acessos)
-  // Usa ON CONFLICT para não duplicar caso já exista
-  await sql`
-    INSERT INTO programas (nome)
-    VALUES (${accessKey})
-    ON CONFLICT (nome) DO NOTHING
-  `
+  // Usa WHERE NOT EXISTS para não depender de UNIQUE constraint no banco
+  // try/catch para não bloquear o retorno mesmo se programas falhar
+  try {
+    await sql`
+      INSERT INTO programas (nome)
+      SELECT ${accessKey}
+      WHERE NOT EXISTS (SELECT 1 FROM programas WHERE nome = ${accessKey})
+    `
+  } catch (e) {
+    console.warn('[admin/projects] Aviso: falha ao inserir em programas:', e)
+  }
 
   return NextResponse.json({ success: true, project: rowToProject(rows[0]) }, { status: 201 })
 }
@@ -122,7 +127,7 @@ export async function PUT(request: NextRequest) {
     // Renomear o programa antigo para o novo nome
     await sql`UPDATE programas SET nome = ${accessKey} WHERE nome = ${oldAccessKey}`
     // Se não existia ainda, garantir que existe
-    await sql`INSERT INTO programas (nome) VALUES (${accessKey}) ON CONFLICT (nome) DO NOTHING`
+    await sql`INSERT INTO programas (nome) SELECT ${accessKey} WHERE NOT EXISTS (SELECT 1 FROM programas WHERE nome = ${accessKey})`
   }
 
   return NextResponse.json({ success: true, project: rowToProject(rows[0]) })
