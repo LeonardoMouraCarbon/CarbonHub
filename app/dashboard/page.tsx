@@ -89,8 +89,10 @@ export default function DashboardPage() {
 
       const data = await response.json()
       console.log('✅ [HUB] Token SSO gerado com sucesso!')
-      
-      const projectUrl = new URL(project.url)
+
+      // Garantir que a URL tem protocolo
+      const rawUrl = project.url.startsWith('http') ? project.url : `https://${project.url}`
+      const projectUrl = new URL(rawUrl)
       projectUrl.searchParams.set('sso_token', data.token)
       projectUrl.searchParams.set('hub_origin', window.location.origin)
       
@@ -99,7 +101,8 @@ export default function DashboardPage() {
       window.open(projectUrl.toString(), '_blank', 'noopener,noreferrer')
     } catch (error) {
       console.error('❌ [HUB] Erro ao gerar SSO:', error)
-      window.open(project.url, '_blank', 'noopener,noreferrer')
+      const fallbackUrl = project.url.startsWith('http') ? project.url : `https://${project.url}`
+      window.open(fallbackUrl, '_blank', 'noopener,noreferrer')
     }
   }
 

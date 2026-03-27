@@ -84,7 +84,9 @@ export default function AdminProjectsPage() {
     }
     setSaving(true)
     const tags = tagsInput.split(',').map(t => t.trim()).filter(Boolean)
-    const payload = { ...form, tags }
+    // Normalizar URL — adiciona https:// se não tiver protocolo
+    const normalizedUrl = form.url.startsWith('http') ? form.url : `https://${form.url}`
+    const payload = { ...form, url: normalizedUrl, tags }
 
     const r = modal === 'create'
       ? await fetch('/api/admin/projects', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
