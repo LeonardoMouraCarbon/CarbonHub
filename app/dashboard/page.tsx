@@ -105,9 +105,11 @@ export default function DashboardPage() {
 
   const projetosPermitidos = userAcessos.map(a => ACESSOS_MAP[a] ?? a)
 
-  const userProjects = projects.filter(p =>
-    projetosPermitidos.length > 0 && projetosPermitidos.includes(p.name)
-  )
+  const isAdmin = userEmail === 'leonardo.moura@carboncapital.com.br' || userRole === 'admin'
+
+  const userProjects = isAdmin
+    ? projects
+    : projects.filter(p => projetosPermitidos.length > 0 && projetosPermitidos.includes(p.name))
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch = 
@@ -117,8 +119,8 @@ export default function DashboardPage() {
 
     const matchesCategory = !selectedCategory || project.category === selectedCategory
 
-    // Traduzir acessos do banco para nomes dos projetos + Carbon ID para admins
-    const hasAccess = projetosPermitidos.length > 0 && projetosPermitidos.includes(project.name)
+    // Admin vê todos os projetos independente de acessos
+    const hasAccess = isAdmin || (projetosPermitidos.length > 0 && projetosPermitidos.includes(project.name))
 
     return matchesSearch && matchesCategory && hasAccess
   })
